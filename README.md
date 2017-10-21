@@ -1,7 +1,7 @@
 # Python jupyter workbooks exploring doing neuroscience shuffle analyses in the cloud
 
 # Notes on deploying a jupyter container to Google cloud.
-I created a jupyter Docker container with pre-installed [nelpy](https://github.com/nelpy/nelpy) and a different default password by forking the [docker-stacks](https://github.com/jupyter/docker-stacks) repostiory. My fork is not yet pushed but should be soon.
+I created a jupyter Docker container with pre-installed [nelpy](https://github.com/nelpy/nelpy) and a different default password by forking the [docker-stacks](https://github.com/jupyter/docker-stacks) repostiory. My fork is now pushed to github [ckemere/docker-stacks](https://github.com/ckemere/docker-stacks).
 
 ## Option 1 - Start up a virtual machine with Docker and then manually start container
 
@@ -19,14 +19,17 @@ This will create a n1-standard-64 instance using the container-optimized OS. Not
    gcloud compute firewall-rules create dask-webinterface --allow https:8787
    ```
    Note that these will create these firewall rules for your entire Google Cloud project. If you want to be more selective, you can do them just for an instance. (``gcloud compute firewall-rules create jupyter-notebook --allow https:8888 --source-tags=[instance-name]``).
+
+**Further note:** Despite the firewall rules. I haven't been successful in getting the dask scheduler dashboard (port 8787) to expose to the world. To access the scheduler, I've needed to tunnel the port, using something like ``gcloud compute ssh [instance-name] -- 
+-L8787:localhost:8787``.
      
 3. ssh into your instance. You can use the browser-based shell or the gcloud command, ``gcloud compute ssh [instance-name]``.
 
 4. Docker is already installed, so to start the container, you need to run the command:
 ```
-docker run ckemere/jupyter -p 8888:8888 -p 8787:8787
+docker run ckemere/jupyter --net=host
 ```
-The ``-p `` flags will expose the jupyter notebook ports and dask console ports from the container to the instance.
+The ``--net=host`` flag exposes all the container ports to the instance.
 
 5. Now, find your instance's IP address from the web console, and load it into your browser ``https://instance-ip:8888`` and you should see a jupyter notebook.
 
