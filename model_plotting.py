@@ -207,9 +207,9 @@ def plot_transmat_gini_departure(ax, hmms, n_max=500, **fig_kws):
             data = data[:n_max,:]
             sns.distplot(data.sum(axis=0)/len(data), hist=False, hist_kws=hist_kws, bins=bins, label=hmm.label, ax=ax)
 
-    ax.set_title('tmat gini departure, N=250')
+    ax.set_title('tmat gini departure, N=50')
     
-    ax.set_xlim(0.6, 0.9)
+    ax.set_xlim(0.6, 1)
     
     sns.despine(ax=ax)
     
@@ -260,7 +260,7 @@ def plot_gini_lambda(ax, hmms, n_max=500, **fig_kws):
 
     ax.set_title('lambda gini, N=250')
     ax.legend('')
-    ax.set_xlim(0.7, 0.9)
+    ax.set_xlim(0.7, 1)
     
     sns.despine(ax=ax)
     
@@ -274,7 +274,7 @@ def plot_lambda_gini_across_states(ax, hmms, n_max=5000, **fig_kws):
         data = data[:n_max,:]
         sns.distplot(data.sum(axis=0)/len(data), hist_kws=hist_kws, bins=bins, hist=False, kde=True, label=hmm.label, ax=ax, kde_kws={'bw':0.05})
     
-    ax.set_title('lambda gini across states, N=250')
+    ax.set_title('lambda gini across states, N=50')
     ax.legend('')
     ax.set_xlim(0., 1)
     
